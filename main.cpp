@@ -1,9 +1,17 @@
+/*
+   Sistema Inteligente de Recomendacion Academica - Modulo C++ (paradigma imperativo)
+   Registra cursos, prerrequisitos, historial academico e intereses del estudiante,
+   los guarda en archivos CSV (Archivos_CSV/) y permite consultarlos por consola.
+   Estos CSV son luego leidos por los modulos en Haskell y Prolog.
+*/
+
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <sstream>
 using namespace std;
 
+// Informacion de un curso del catalogo
 struct Curso
 {
     string codigo;
@@ -12,12 +20,14 @@ struct Curso
     int creditos;
 };
 
+// Relacion curso -> prerrequisito que debe estar aprobado antes de llevarlo
 struct Prerrequisito
 {
     string curso;
     string prerrequisito;
 };
 
+// Nota obtenida por un estudiante en un curso
 struct Historial
 {
     string estudiante;
@@ -25,18 +35,22 @@ struct Historial
     int nota;
 };
 
+// Area academica de interes de un estudiante
 struct Interes
 {
     string estudiante;
     string area;
 };
 
+// Datos en memoria, cargados desde los CSV al iniciar y actualizados con cada registro
 vector<Curso> cursos;
 vector<Prerrequisito> prerrequisitos;
 vector<Historial> historial;
 vector<Interes> intereses;
 
-// INICIO CURSOS
+// ===== CURSOS =====
+
+// Escribe todo el vector de cursos en Archivos_CSV/cursos.csv
 void guardarCursosCSV()
 {
     ofstream archivo("Archivos_CSV/cursos.csv");
@@ -56,6 +70,7 @@ void guardarCursosCSV()
     cout << "\nArchivo cursos.csv guardado correctamente.\n";
 }
 
+// Pide los datos de un curso por consola, lo agrega al vector y lo persiste en CSV
 void registrarCurso()
 {
     Curso nuevo;
@@ -80,6 +95,7 @@ void registrarCurso()
     guardarCursosCSV();
 }
 
+// Imprime por consola todos los cursos cargados en memoria
 void mostrarCursos()
 {
     cout << "\n===== CURSOS REGISTRADOS =====";
@@ -100,6 +116,7 @@ void mostrarCursos()
     }
 }
 
+// Carga cursos.csv en el vector cursos al iniciar el programa
 void leerCursosCSV()
 {
     ifstream archivo("Archivos_CSV/cursos.csv");
@@ -133,9 +150,10 @@ void leerCursosCSV()
 
     archivo.close();
 }
-// FIN CURSOS
 
-// INICIO PRERREQUISITOS
+// ===== PRERREQUISITOS =====
+
+// Escribe todo el vector de prerrequisitos en Archivos_CSV/prerrequisitos.csv
 void guardarPrerrequisitosCSV()
 {
     ofstream archivo("Archivos_CSV/prerrequisitos.csv");
@@ -153,6 +171,7 @@ void guardarPrerrequisitosCSV()
     cout << "\nArchivo prerrequisitos.csv guardado correctamente.\n";
 }
 
+// Pide un par (curso, prerrequisito) por consola y lo persiste en CSV
 void registrarPrerrequisito()
 {
     Prerrequisito nuevo;
@@ -172,6 +191,7 @@ void registrarPrerrequisito()
     cout << "\nPrerrequisito registrado correctamente.\n";
 }
 
+// Carga prerrequisitos.csv en el vector prerrequisitos al iniciar el programa
 void leerPrerrequisitosCSV()
 {
     ifstream archivo("Archivos_CSV/prerrequisitos.csv");
@@ -197,9 +217,10 @@ void leerPrerrequisitosCSV()
 
     archivo.close();
 }
-// FIN PRERREQUISITOS
 
-// TODO HISTORIAL
+// ===== HISTORIAL ACADEMICO =====
+
+// Escribe todo el vector de historial en Archivos_CSV/historial.csv
 void guardarHistorialCSV()
 {
     ofstream archivo("Archivos_CSV/historial.csv");
@@ -218,6 +239,8 @@ void guardarHistorialCSV()
     cout << "\nArchivo historial.csv guardado correctamente.\n";
 }
 
+// Pide estudiante, curso y nota por consola (valida que la nota este en 0-20)
+// y persiste el registro en CSV. Nota >= 11 se considera aprobado.
 void registrarHistorial()
 {
     Historial nuevo;
@@ -249,6 +272,7 @@ void registrarHistorial()
     cout << "\nHistorial registrado correctamente.\n";
 }
 
+// Imprime por consola todos los registros de historial cargados en memoria
 void mostrarHistorial()
 {
     cout << "\n===== HISTORIAL =====";
@@ -268,6 +292,7 @@ void mostrarHistorial()
     }
 }
 
+// Carga historial.csv en el vector historial al iniciar el programa
 void leerHistorialCSV()
 {
     ifstream archivo("Archivos_CSV/historial.csv");
@@ -298,9 +323,10 @@ void leerHistorialCSV()
 
     archivo.close();
 }
-// FIN HISTORIAL
 
-// TODO INTERESES DE ALUMNOS
+// ===== INTERESES DEL ESTUDIANTE =====
+
+// Escribe todo el vector de intereses en Archivos_CSV/intereses.csv
 void guardarInteresesCSV()
 {
     ofstream archivo("Archivos_CSV/intereses.csv");
@@ -318,6 +344,7 @@ void guardarInteresesCSV()
     cout << "\nArchivo intereses.csv guardado correctamente.\n";
 }
 
+// Pide un area de interes de un estudiante por consola y la persiste en CSV
 void registrarInteres()
 {
     Interes nuevo;
@@ -338,6 +365,7 @@ void registrarInteres()
     cout << "\nInteres registrado correctamente.\n";
 }
 
+// Carga intereses.csv en el vector intereses al iniciar el programa
 void leerInteresesCSV()
 {
     ifstream archivo("Archivos_CSV/intereses.csv");
@@ -363,9 +391,10 @@ void leerInteresesCSV()
 
     archivo.close();
 }
-// FIN INTERESES DE ALUMNOS
 
-// APROBADOS
+// ===== CONSULTAS Y REPORTES =====
+
+// Muestra los cursos que un estudiante aprobo (nota >= 11)
 void mostrarCursosAprobados()
 {
     string estudiante;
@@ -392,7 +421,7 @@ void mostrarCursosAprobados()
     }
 }
 
-// DESAPROBADOS
+// Muestra los cursos que un estudiante desaprobo (nota < 11)
 void mostrarCursosDesaprobados()
 {
     string estudiante;
@@ -415,12 +444,13 @@ void mostrarCursosDesaprobados()
 
     if (!encontrado)
     {
-        cout << "No hay cursos aprobados para ese estudiante." << endl;
+        cout << "No hay cursos desaprobados para ese estudiante." << endl;
     }
 }
 
+// Devuelve el nombre del curso dado su codigo (cadena vacia si no existe)
 string buscarCurso(string codCurso)
-{   
+{
     string nombre;
     for (int i = 0; i < cursos.size(); i++)
     {
@@ -431,6 +461,8 @@ string buscarCurso(string codCurso)
     return nombre;
 }
 
+// Calcula y muestra el resumen academico de un estudiante: promedio, cantidad
+// de cursos aprobados/desaprobados y los cursos de mayor y menor nota
 void reporteGeneral()
 {
     string estudiante;
@@ -500,6 +532,7 @@ void reporteGeneral()
     cout << "Menor nota: " << nombreCursoMenor << " (" << menorNota << ")" << endl;
 }
 
+// Carga los CSV existentes y muestra el menu principal hasta que el usuario elija salir
 int main()
 {
     leerCursosCSV();
